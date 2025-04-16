@@ -1,0 +1,13 @@
+version: '3.9'
+gateway:
+  build: ./gateway
+  ports:
+    - "8007:8000"
+  networks:
+    - authorization
+    - catalog
+    - customers
+    - entries
+    - exits
+    - stock
+    - suppliers

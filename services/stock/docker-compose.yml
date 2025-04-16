@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: stock_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5436:5432"
+    networks:
+      - stock
+  stock_backend:
+    build: ./stock
+    ports:
+      - "8004:8000"
+    depends_on:
+      - db
+    networks:
+      - stock
+      - users
+  stock_queue:
+    build: ./stock
+    command: >
+      sh -c "python manage.py wait_for_db
+      && python consumer.py"
+    depends_on:
+      - db
+    networks:
+      - stock
+networks:
+  stock:
+  users:
+    external:
+      name: users

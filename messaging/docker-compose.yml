@@ -1,0 +1,23 @@
+version: '3.9'
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER} # Usuário do RabbitMQ
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASS} # Senha do RabbitMQ
+    ports:
+      - "5672:5672" # Porta de comunicação entre serviços
+      - "15672:15672" # Interface de gerenciamento do RabbitMQ
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"] # Verifica se o RabbitMQ está funcionando
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - authorization
+      - catalog
+      - customers
+      - entries
+      - exits
+      - stock
+      - suppliers
