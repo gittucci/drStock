@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.8'
 services:
   db:
     image: postgres:latest
@@ -30,7 +30,5 @@ services:
     networks:
       - entries
 networks:
-  entries:
-  users:
-    external:
-      name: users
+  rede_principal:
+    external: true

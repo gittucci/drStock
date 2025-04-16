@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.8'
 gateway:
   build: ./gateway
   ports:
@@ -11,3 +11,5 @@ gateway:
     - exits
     - stock
     - suppliers
+    rede_principal:
+      external: true

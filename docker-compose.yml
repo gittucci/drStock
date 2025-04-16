@@ -1,0 +1,21 @@
+version: '3.8'
+
+networks:
+  rede_principal:
+    driver: bridge
+
+# Não definimos services aqui diretamente.
+# A orquestração dos serviços é feita ao invocar o docker-compose
+# especificando os arquivos individuais.
+
+### Para rodar o ambiente (tirar as quebras de página):
+# docker-compose
+# -f services/catalog/docker-compose.yml
+# -f services/customers/docker-compose.yml
+# -f services/entries/docker-compose.yml
+# -f services/exits/docker-compose.yml
+# -f services/gateway/docker-compose.yml
+# -f services/stock/docker-compose.yml
+# -f services/suppliers/docker-compose.yml
+# -f frontend/docker-compose.yml
+### FIM ! 
