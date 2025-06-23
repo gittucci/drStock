@@ -1,21 +1,337 @@
 version: '3.8'
 
+services:
+# Catalog
+  catalog_db:
+    image: postgres:latest
+    container_name: catalog_db
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - DATABASE_URL_CATALOG = "postgresql+psycopg2://postgres:postgres@catalog_db/db"
+    ports:
+      - "5434:5433"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    restart: always
+    networks:
+      - catalog
+  catalog_backend:
+    container_name: catalog_backend
+    build:
+      context: ./services/catalog
+      dockerfile: Dockerfile
+    volumes:
+      - ./services/catalog/app:/app
+    working_dir: /app
+    ports:
+      - "8000:8000"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    restart: always
+    networks:
+      - catalog
+      - users
+  # catalog_queue:
+  #   build: .    
+  #   #build: ./services/catalog
+  #   command: >
+  #     sh -c "python manage.py wait_for_db && python consumer.py"
+  #   depends_on:
+  #     - catalog_db
+  #   networks:
+  #     - catalog
+
+  # Customers
+  customers_db:
+    image: postgres:latest
+    container_name: customers_db
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - DATABASE_URL_CATALOG = "postgresql+psycopg2://postgres:postgres@customers_db/db"
+    ports:
+      - "5435:5433"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    restart: always
+    networks:
+      - customers
+  customers_backend:
+    container_name: customers_backend
+    build:
+      context: ./services/customers
+      dockerfile: Dockerfile
+    volumes:
+      - ./services/customers/app:/app
+    working_dir: /app
+    ports:
+      - "8001:8000"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    restart: always
+    networks:
+      - customers
+      - users
+  # customers_queue:
+  #   build: .    
+  #   #build: ./services/customers
+  #   command: >
+  #     sh -c "python manage.py wait_for_db && python consumer.py"
+  #   depends_on:
+  #     - customers_db
+  #   networks:
+  #     - customers
+
+  # Entries
+  entries_db:
+    image: postgres:latest
+    container_name: entries_db
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - DATABASE_URL_CATALOG = "postgresql+psycopg2://postgres:postgres@entries_db/db"
+    ports:
+      - "5436:5433"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    restart: always
+    networks:
+      - entries
+  entries_backend:
+    container_name: entries_backend
+    build:
+      context: ./services/entries
+      dockerfile: Dockerfile
+    volumes:
+      - ./services/entries/app:/app
+    working_dir: /app
+    ports:
+      - "8002:8000"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    restart: always
+    networks:
+      - entries
+      - users
+  # entries_queue:
+  #   build: .    
+  #   #build: ./services/entries
+  #   command: >
+  #     sh -c "python manage.py wait_for_db && python consumer.py"
+  #   depends_on:
+  #     - entries_db
+  #   networks:
+  #     - entries
+
+  # Exits
+  exits_db:
+    image: postgres:latest
+    container_name: exits_db
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - DATABASE_URL_CATALOG = "postgresql+psycopg2://postgres:postgres@exits_db/db"
+    ports:
+      - "5437:5433"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    restart: always
+    networks:
+      - exits
+  exits_backend:
+    container_name: exits_backend
+    build:
+      context: ./services/exits
+      dockerfile: Dockerfile
+    volumes:
+      - ./services/exits/app:/app
+    working_dir: /app
+    ports:
+      - "8003:8000"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - exits_db
+    restart: always
+    networks:
+      - exits
+      - users
+  # exits_queue:
+  #   build: .    
+  #   #build: ./services/exits
+  #   command: >
+  #     sh -c "python manage.py wait_for_db && python consumer.py"
+  #   depends_on:
+  #     - catalog_db
+  #   networks:
+  #     - exits
+
+  # Stock
+  stock_db:
+    image: postgres:latest
+    container_name: stock_db
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - DATABASE_URL_CATALOG = "postgresql+psycopg2://postgres:postgres@stock_db/db"
+    ports:
+      - "5438:5433"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    restart: always
+    networks:
+      - stock
+  stock_backend:
+    container_name: stock_backend
+    build:
+      context: ./services/stock
+      dockerfile: Dockerfile
+    volumes:
+      - ./services/stock/app:/app
+    working_dir: /app
+    ports:
+      - "8004:8000"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    restart: always
+    networks:
+      - stock
+      - users
+  # stock_queue:
+  #   build: .    
+  #   #build: ./services/stock
+  #   command: >
+  #     sh -c "python manage.py wait_for_db && python consumer.py"
+  #   depends_on:
+  #     - stock_db
+  #   networks:
+  #     - stock
+
+  # Suppliers
+  suppliers_db:
+    image: postgres:latest
+    container_name: suppliers_db
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - DATABASE_URL_CATALOG = "postgresql+psycopg2://postgres:postgres@suppliers_db/db"
+    ports:
+      - "5439:5433"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    restart: always
+    networks:
+      - suppliers
+  suppliers_backend:
+    container_name: suppliers_backend
+    build:
+      context: ./services/suppliers
+      dockerfile: Dockerfile
+    volumes:
+      - ./services/suppliers/app:/app
+    working_dir: /app
+    ports:
+      - "8005:8000"
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    restart: always
+    networks:
+      - suppliers
+      - users
+  # suppliers_queue:
+  #   build: .    
+  #   #build: ./services/suppliers
+  #   command: >
+  #     sh -c "python manage.py wait_for_db && python consumer.py"
+  #   depends_on:
+  #     - suppliers_db
+  #   networks:
+  #     - suppliers
+
+  # # Gateway
+  # gateway:
+  #   build: ./services/gateway
+  #   ports:
+  #     - "8007:8000"
+  #   command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload # Inicia a aplicação com Uvicorn
+  #   networks:
+  #     - catalog
+  #     - customers
+  #     - entries
+  #     - exits
+  #     - stock
+  #     - suppliers
+
+  # # Frontend
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - gateway
+  #   networks:
+  #     - rede_principal
+
+# Messaging (RabbitMQ)
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER} # Usuário do RabbitMQ
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASS} # Senha do RabbitMQ
+    ports:
+      - "5672:5672" # Porta de comunicação entre serviços
+      - "15672:15672" # Interface de gerenciamento do RabbitMQ
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"] # Verifica se o RabbitMQ está funcionando
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - comunicacao_microsservicos
+
+volumes:
+ postgres_volume:
+
 networks:
-  rede_principal:
-    driver: bridge
-
-# Não definimos services aqui diretamente.
-# A orquestração dos serviços é feita ao invocar o docker-compose
-# especificando os arquivos individuais.
-
-### Para rodar o ambiente (tirar as quebras de página):
-# docker-compose
-# -f services/catalog/docker-compose.yml
-# -f services/customers/docker-compose.yml
-# -f services/entries/docker-compose.yml
-# -f services/exits/docker-compose.yml
-# -f services/gateway/docker-compose.yml
-# -f services/stock/docker-compose.yml
-# -f services/suppliers/docker-compose.yml
-# -f frontend/docker-compose.yml
-### FIM ! 
+  catalog:
+  customers:
+  entries:
+  exits:
+  stock:
+  suppliers:
+  users:
+  comunicacao_microsservicos:
+  # rede_principal:
+  #   external: true

@@ -1,12 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import os
-
-DATABASE_URL = "postgresql://user:password@db/catalog_db"
+from sqlalchemy.orm import sessionmaker, Session
 
 # Obtém a URL do banco de dados da variável de ambiente
-#DATABASE_URL = os.environ.get("DATABASE_URL_MICROSSERVICO_1")
+DATABASE_URL = "postgresql+psycopg2://postgres:postgres@catalog_db/db"
 
 # Cria a engine para gerenciar a conexão com o banco
 engine = create_engine(DATABASE_URL)

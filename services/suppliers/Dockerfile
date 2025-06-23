@@ -7,11 +7,17 @@ WORKDIR /app
 # Copy the requirements file
 COPY requirements.txt .
 
+# Copy environment variables file
+COPY .env .
+
+# Atualiza o pip e o setuptools para as versões mais recentes e instala o Cython
+RUN pip3 install --upgrade pip
+
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copy the application code
 COPY ./app /app
 
 # Command to run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8005", "--reload"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8005, "--reload"]
