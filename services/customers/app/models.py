@@ -1,5 +1,9 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Float, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
+from sqlalchemy import func
+from datetime import datetime
+from pydantic import BaseModel, BaseSettings, Field
 from database import Base
+from typing import List, Optional
 
 class CustomersModel(Base):
     __tablename__ = "customers"
@@ -20,3 +24,47 @@ class CustomersModel(Base):
     country = Column(String, nullable=False)
     last_update = Column(DateTime, default=func.now())
     user_id = Column(Integer)
+
+# ESQUEMA DE CRIAÇÃO
+class CreateCustomer(BaseModel):
+    customer_id: int
+    customer_name: str
+    email: str
+    whatsapp: str
+    cellphone: str
+    telephone: str
+    cpf_cnpj: str
+    zipcode: str
+    street: str
+    number = str
+    complement: str
+    city: str
+    state: str
+    country: str
+    last_update: datetime
+    user_id: int
+    class Config:
+        arbitrary_types_allowed = True
+        orm_mode = True
+
+# ESQUEMA DE EDIÇÃO
+class EditCustomer(BaseModel):
+    customer_id: Optional[int]
+    customer_name: Optional[str]
+    email: Optional[str]
+    whatsapp: Optional[str]
+    cellphone: Optional[str]
+    telephone: Optional[str]
+    cpf_cnpj: Optional[str]
+    zipcode: Optional[str]
+    street: Optional[str]
+    number: Optional[str]
+    complement: Optional[str]
+    city: Optional[str]
+    state: Optional[str]
+    country: Optional[str]
+    last_update: Optional[datetime]
+    user_id: Optional[int]
+    class Config:
+        arbitrary_types_allowed = True
+        orm_mode = True

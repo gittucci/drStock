@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, Float, Boolean, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import func
 from database import Base
 
 class StockModel(Base):
@@ -26,6 +26,7 @@ class StockModel(Base):
     user_id = Column(Integer)
 
     def calculate_inventory(self):  # refazer
+        pass
 
 
     def calculate_stock(self):  # refazer

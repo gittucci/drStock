@@ -7,7 +7,6 @@ import logging
 from sqlalchemy.orm import Session
 from database import get_session, Base, engine
 from models import UsuarioModel
-from uuid import uuid4
 
 # Configuração do logger para registrar eventos e erros
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -47,7 +46,7 @@ async def stock_update():
     if not stock:
         try:
             stock = StockModel(
-                stock_id = str(uuid4()),
+                stock_id = str,
                 product_id = info_produto['product_id'],
                 code = info_produto['code'],
                 barcode = info_produto['barcode'],
