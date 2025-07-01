@@ -1,6 +1,8 @@
+httpx
 aio_pika
 fastapi
 uvicorn
 sqlalchemy
 psycopg2-binary
-uvicorn
+slowapi
+pydantic==1.10.11
