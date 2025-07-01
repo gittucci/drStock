@@ -1,7 +1,5 @@
 aio_pika
 fastapi
-aio_pika
-fastapi
 uvicorn
 sqlalchemy
 psycopg2-binary

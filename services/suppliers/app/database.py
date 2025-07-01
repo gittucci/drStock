@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 
 # Obtém a URL do banco de dados da variável de ambiente
-DATABASE_URL = "postgresql+psycopg2://postgres:postgres@suppliers_db/db"
+DATABASE_URL = "postgresql+psycopg2://postgres:postgres@suppliers_db/suppliers_db"
 
 # Cria a engine para gerenciar a conexão com o banco
 engine = create_engine(DATABASE_URL)
