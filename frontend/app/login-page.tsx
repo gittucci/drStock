@@ -4,7 +4,7 @@ export default function LoginPage() {
     const handleLogin = () => {
         // Implement login logic here
         // After successful login, redirect to products page
-        window.location.href = '/products-page';
+        window.location.href = '/products-prod-page';
     };
 
     return (

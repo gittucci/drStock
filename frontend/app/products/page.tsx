@@ -8,7 +8,7 @@ const products = [
     // Add more products as needed
 ];
 
-export default function Page() {
+export default function ProdPage() {
     return (
         <div className="flex">
             <aside className="w-1/12 bg-blue-800 text-white p-4">
