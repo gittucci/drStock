@@ -1,5 +1,3 @@
-# frontend/Dockerfile
-
 # Use the official Node.js image
 FROM node:20
 
@@ -11,9 +9,15 @@ COPY package*.json ./
 
 # Install dependencies
 RUN npm install
+RUN npm install --save-dev @types/react-router-dom
 
 # Copy the rest of the application code
-COPY . .
+COPY ./app ./app
+COPY ./components ./
+COPY ./lib ./lib
+COPY components*.* ./
+COPY next*.* ./
+COPY tsconfig*.* ./
 
 # Build the application
 RUN npm run build

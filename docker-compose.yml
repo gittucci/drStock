@@ -318,7 +318,6 @@ services:
       - suppliers
       - users
 
-
   # # Frontend
   # frontend:
   #   build: ./frontend
@@ -327,7 +326,7 @@ services:
   #   depends_on:
   #     - gateway
   #   networks:
-  #     - rede_principal
+  #     - users
 
 # Messaging (RabbitMQ)
   rabbitmq:
